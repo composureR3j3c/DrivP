@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driveridee/AllScreens/NewTripScreen.dart';
 import 'package:driveridee/Globals/Global.dart';
 import 'package:driveridee/Helpers/assistantMethods.dart';
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:driveridee/Models/UserRideRequestInfo.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -139,13 +140,16 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       audioPlayer.pause();
                       audioPlayer.stop();
                       audioPlayer = AssetsAudioPlayer();
 
                       // cancel the rideRequest
-
+                      var Respone = await OnPremMethods.premAcceptReject(
+                          globalRideRequestId,
+                          currentFirebaseUser!.uid,
+                          "cancelled");
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -186,7 +190,9 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
     );
   }
 
-  acceptRideRequest(BuildContext context) {
+  acceptRideRequest(BuildContext context) async {
+    var Respone = await OnPremMethods.premAcceptReject(
+        globalRideRequestId, currentFirebaseUser!.uid, "accepted");
     String getRideRequestId = "";
     FirebaseDatabase.instance
         .ref()

@@ -1,7 +1,10 @@
 // import 'dart:js';
 
+import 'dart:convert';
+
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:driveridee/Globals/Global.dart';
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:driveridee/Models/UserRideRequestInfo.dart';
 import 'package:driveridee/Widgets/NotificationDialogBox.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -43,63 +46,54 @@ class PushNotifServices {
   }
 
   readUserRideRequestInformation(
-      String userRideRequestId, BuildContext context) {
+      String userRideRequestId, BuildContext context) async {
     print("#####here######");
-    FirebaseDatabase.instance
-        .ref()
-        .child("Ride_Request")
-        .child(userRideRequestId)
-        .once()
-        .then((snapData) {
-      if (snapData.snapshot.value != null) {
-        audioPlayer.open(Audio("sounds/music_notification.mp3"));
-        audioPlayer.play();
+    var response = await OnPremMethods.getTripDetail(userRideRequestId);
 
-        double originLat = double.parse(
-            (snapData.snapshot.value! as Map)["pickup"]["latitude"]);
-        double originLng = double.parse(
-            (snapData.snapshot.value! as Map)["pickup"]["longitude"]);
-        String originAddress =
-            (snapData.snapshot.value! as Map)["pickup_address"];
+    if (response != 404) {
+      audioPlayer.open(Audio("sounds/music_notification.mp3"));
+      audioPlayer.play();
+      double originLat = double.parse(response["tripDetail"]["from"]["x"]);
+      double originLng = double.parse(response["tripDetail"]["from"]["y"]);
+      String originAddress = response["tripDetail"]["from"]["name"];
 
-        double destinationLat = double.parse(
-            (snapData.snapshot.value! as Map)["dropoff"]["latitude"]);
-        double destinationLng = double.parse(
-            (snapData.snapshot.value! as Map)["dropoff"]["longitude"]);
-        String destinationAddress =
-            (snapData.snapshot.value! as Map)["dropoff_address"];
+      double destinationLat = double.parse(response["tripDetail"]["to"]["x"]);
+      double destinationLng = double.parse(response["tripDetail"]["to"]["x"]);
+      String destinationAddress = response["tripDetail"]["to"]["name"];
 
-        String userName = (snapData.snapshot.value! as Map)["rider_name"];
-        String userPhone = (snapData.snapshot.value! as Map)["rider_phone"];
+      String userName = response["passenger"]["name"];
+      String userPhone = response["passenger"]["phone"];
 
-        UserRideRequestInformation userRideRequestDetails =
-            UserRideRequestInformation();
+      UserRideRequestInformation userRideRequestDetails =
+          UserRideRequestInformation();
 
-        userRideRequestDetails.originLatLng = LatLng(originLat, originLng);
-        userRideRequestDetails.originAddress = originAddress;
+      userRideRequestDetails.originLatLng = LatLng(originLat, originLng);
+      userRideRequestDetails.originAddress = originAddress;
 
-        String? rideRequestId = snapData.snapshot.key;
+      // String? rideRequestId = response.snapshot.key;
 
-        userRideRequestDetails.destinationLatLng =
-            LatLng(destinationLat, destinationLng);
-        userRideRequestDetails.destinationAddress = destinationAddress;
+      userRideRequestDetails.destinationLatLng =
+          LatLng(destinationLat, destinationLng);
+      userRideRequestDetails.destinationAddress = destinationAddress;
 
-        userRideRequestDetails.userName = userName;
-        userRideRequestDetails.userPhone = userPhone;
+      userRideRequestDetails.userName = userName;
+      userRideRequestDetails.userPhone = userPhone;
 
-        userRideRequestDetails.rideRequestId = rideRequestId;
+      userRideRequestDetails.rideRequestId = response["tripId"];
 
-        userRideRequestDetails.rideRequestId = rideRequestId;
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => NotificationDialogBox(
-            userRideRequestDetails: userRideRequestDetails,
-          ),
-        );
-      } else {
-        Fluttertoast.showToast(msg: "This Ride Request Id do not exists.");
-      }
-    });
+      userRideRequestDetails.rideRequestId = response["tripId"];
+      ;
+      globalRideRequestId = response["tripId"];
+      ;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => NotificationDialogBox(
+          userRideRequestDetails: userRideRequestDetails,
+        ),
+      );
+    } else {
+      Fluttertoast.showToast(msg: "This Ride Request Id do not exists.");
+    }
   }
 
   Future generateAndGetToken() async {

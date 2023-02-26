@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:driveridee/Globals/Global.dart';
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:driveridee/Notifications/pushNotificationService.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -65,24 +66,9 @@ class _HomeTabState extends State<HomeTab> {
         );
         newGoogleMapController
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
-
-        //   final address =
-        //       await AssistantMethods.searchAddressForGeographicCoOrdinates(
-        //           position, context);
-        //   print("address##############");
-        //   print(address);
-        //   setState(() {
-        //     bottomPadding = 300.0;
-        //   });
       }
     }
   }
-
-  // void subscribeToNotif() {
-  //   PushNotifServices pushNotifServices = PushNotifServices();
-  //   pushNotifServices.checkPermission();
-  //   // pushNotifServices.getToken();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +110,7 @@ class _HomeTabState extends State<HomeTab> {
                     if (isDriverAvailable != true) {
                       makeDriverOnline();
                       getLiveLocation();
-
+                      if (!mounted) return;
                       setState(() {
                         driverStatusColor = Colors.green;
                         driverStatusText = "Online Now";
@@ -133,6 +119,7 @@ class _HomeTabState extends State<HomeTab> {
                       Fluttertoast.showToast(msg: "you are Online Now.");
                     } else {
                       getLiveLocation();
+                      if (!mounted) return;
                       setState(() {
                         driverStatusColor = Colors.black;
                         driverStatusText = "Offline Now - Go Online";
@@ -220,15 +207,25 @@ class _HomeTabState extends State<HomeTab> {
         driverCurrentPosition!.latitude, driverCurrentPosition!.longitude);
     rideReference!.set("idle");
     rideReference!.onValue.listen((event) {});
+    await OnPremMethods.premOnlineOffline(
+        currentFirebaseUser!.uid,
+        driverCurrentPosition!.latitude,
+        driverCurrentPosition!.longitude,
+        "online");
   }
 
-  void makeDriverOffnline() {
+  void makeDriverOffnline() async {
     Geofire.removeLocation(currentFirebaseUser!.uid);
     rideReference!.onDisconnect();
     rideReference!.remove();
     rideReference = null;
 
     Fluttertoast.showToast(msg: "you are Offline Now.");
+    await OnPremMethods.premOnlineOffline(
+        currentFirebaseUser!.uid,
+        driverCurrentPosition!.latitude,
+        driverCurrentPosition!.longitude,
+        "offline");
   }
 
   void getLiveLocation() {
