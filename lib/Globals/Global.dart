@@ -21,5 +21,5 @@ DriverData onlineDriverData = DriverData();
 StreamSubscription<Position>? streamSubscriptionPosition;
 StreamSubscription<Position>? streamSubscriptionDriverLivePosition;
 
-String premUrl = "https://0a10-196-188-92-147.in.ngrok.io/";
+String premUrl = "https://rideapi.gubanet.com";
 String? globalRideRequestId = "";

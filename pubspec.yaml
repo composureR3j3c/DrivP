@@ -37,7 +37,7 @@ dependencies:
   firebase_core: ^1.24.0
   firebase_auth: ^3.4.2
   firebase_database: ^9.1.6
-  google_maps_flutter: ^2.2.1
+  google_maps_flutter: any
   geolocator: ^9.0.2
   http: ^0.13.5
   provider: ^6.0.3
@@ -50,11 +50,14 @@ dependencies:
   flutter_geofire: ^2.0.1
   firebase_messaging: ^13.1.0
   assets_audio_player: ^3.0.5
+  multi_language_json: ^1.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
+  shared_preferences: 2.0.13
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -77,7 +80,7 @@ flutter:
   assets:
     - images/
     - sounds/
-
+    - assets/ca/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

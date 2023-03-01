@@ -15,12 +15,16 @@ class OnPremMethods {
     };
 
     Map Body = {"tripId": tripId, "driverId": deriverID, "status": status};
-    http.Response httpResponse = await http.post(
-      Uri.parse(url),
-      body: jsonEncode(Body),
-      headers: header,
-    );
-    return httpResponse;
+    try {
+      http.Response httpResponse = await http.post(
+        Uri.parse(url),
+        body: jsonEncode(Body),
+        headers: header,
+      );
+      return httpResponse;
+    } catch (e) {
+      return e;
+    }
   }
 
   static Future<dynamic> premOnlineOffline(
@@ -39,12 +43,18 @@ class OnPremMethods {
       "location": {"x": lat, "y": lon},
       "state": status
     };
-    http.Response httpResponse = await http.post(
-      Uri.parse(url),
-      body: jsonEncode(Body),
-      headers: header,
-    );
-    return httpResponse;
+    try {
+      http.Response httpResponse = await http.post(
+        Uri.parse(url),
+        body: jsonEncode(Body),
+        headers: header,
+      );
+      print("Succ Host" + httpResponse.body.toString());
+      return httpResponse;
+    } catch (e) {
+      print("Host Excep " + e.toString() + "Hostend");
+      return e;
+    }
   }
 
   static Future<dynamic> getTripDetail(String tripId) async {
@@ -55,15 +65,18 @@ class OnPremMethods {
       'Content-Type': 'application/json',
       'Authorization': key,
     };
-
-    http.Response httpResponse = await http.get(
-      Uri.parse(url),
-      headers: header,
-    );
-    if (httpResponse.statusCode == 200) {
-      return jsonDecode(httpResponse.body);
-    } else {
-      return 404;
+    try {
+      http.Response httpResponse = await http.get(
+        Uri.parse(url),
+        headers: header,
+      );
+      if (httpResponse.statusCode == 200) {
+        return jsonDecode(httpResponse.body);
+      } else {
+        return 404;
+      }
+    } catch (e) {
+      return e;
     }
   }
 }

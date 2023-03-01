@@ -1,4 +1,5 @@
 import 'package:driveridee/AllScreens/SplashScreen.dart';
+import 'package:driveridee/AllScreens/home.dart';
 import 'package:driveridee/Globals/Global.dart';
 import 'package:flutter/material.dart';
 
@@ -12,17 +13,20 @@ class ProfileTab extends StatefulWidget {
 class _ProfileTabState extends State<ProfileTab> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        child: const Text(
-          "Sign Out",
+    return Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      Home(),
+      Center(
+        child: ElevatedButton(
+          child: const Text(
+            "Sign Out",
+          ),
+          onPressed: () {
+            fAuth.signOut();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => const MySplashScreen()));
+          },
         ),
-        onPressed: () {
-          fAuth.signOut();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (c) => const MySplashScreen()));
-        },
-      ),
-    );
+      )
+    ]);
   }
 }
