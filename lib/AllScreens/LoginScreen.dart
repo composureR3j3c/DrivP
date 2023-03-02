@@ -3,6 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:google_fonts/google_fonts.dart';
+
 import '../Globals/Global.dart';
 import '../Widgets/ProgressDialog.dart';
 import 'SignUPScreen.dart';
@@ -84,18 +86,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 30,
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Image.asset("images/logo1.png"),
+                padding: const EdgeInsets.all(50.0),
+                child: Image.asset("images/logo.png"),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Login as a User",
-                style: TextStyle(
-                  fontSize: 26,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold,
+              Text(
+                "One Taxi",
+                            style: GoogleFonts.pacifico(
+                                textStyle: TextStyle(
+                              color: Colors.red,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w900,)
                 ),
               ),
               TextField(
