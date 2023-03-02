@@ -4,6 +4,9 @@ import '../Globals/Global.dart';
 import '../Helpers/assistantMethods.dart';
 import 'LoginScreen.dart';
 import 'mainScreen.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+
 
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({Key? key}) : super(key: key);
@@ -41,22 +44,23 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.black,
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset("images/logo1.png"),
+              Image.asset("images/logo.png"),
               const SizedBox(
                 height: 10,
               ),
-              const Text(
-                "Get a lift App",
-                style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
-              ),
+              Text(
+                "One Taxi Driver",
+                style: GoogleFonts.pacifico(
+                    textStyle: TextStyle(
+                  color: Colors.red,
+                  fontSize: 48,
+                  fontWeight: FontWeight.w900,
+                ),),),
             ],
           ),
         ),

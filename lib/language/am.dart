@@ -13,3 +13,4 @@ class LanguageAm extends Languages {
   @override
   String get labelInfo => "This is multi-languages demo application";
 }
+ 

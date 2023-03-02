@@ -1,5 +1,7 @@
+import 'package:driveridee/AllScreens/SplashScreen.dart';
 import 'package:driveridee/AllScreens/mainScreen.dart';
 import 'package:driveridee/Globals/Global.dart';
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,7 +59,20 @@ class _CarInfoState extends State<CarInfo> {
       reference.child(userId).child("Car_details").set(CarInfoMap);
 
       Fluttertoast.showToast(msg: "Car details has been registered.");
-      Navigator.push(context, MaterialPageRoute(builder: (c) => MainScreen()));
+    //  var response = await OnPremMethods.createUseronPrem( onlineDriverData.name!, onlineDriverData.lname!,onlineDriverData.phone!,onlineDriverData.email!,onlineDriverData.id!, onlineDriverData.pw!,carColorTextEditingController.text.trim()
+    //     ,carModelTextEditingController.text.trim(),
+    //     carNumberTextEditingController.text.trim());
+    //   print("response");
+    //   print(response);
+    //   if (response.statusCode == 200) {
+    //     Fluttertoast.showToast(msg: "Account has been Created.");
+    //     Navigator.push(
+    //         context, MaterialPageRoute(builder: (c) => MainScreen()));
+    //   } else if (response.statusCode == 400) {
+    //     Fluttertoast.showToast(msg: "Account has not been Created.");
+    //     Navigator.pop(context);
+    //   }
+
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Car details has not been registered.");
@@ -75,7 +90,7 @@ class _CarInfoState extends State<CarInfo> {
               height: 22.0,
             ),
             Image.asset(
-              "images/logo1.png",
+              "images/taxi.png",
               width: 390.0,
               height: 250.0,
             ),

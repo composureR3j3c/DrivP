@@ -33,6 +33,7 @@ class MyApp extends StatefulWidget {
 
   static void setLocale(BuildContext context, Locale newLocale) {
     var state = context.findAncestorStateOfType<_MyAppState>();
+    print("newLocale"+newLocale.toString());
     state?.setLocale(newLocale);
   }
 
