@@ -2,14 +2,17 @@ import 'dart:io';
 
 import 'package:driveridee/AllScreens/SplashScreen.dart';
 import 'package:driveridee/Provider/appdata.dart';
-import 'package:driveridee/language/locale_constant.dart';
-import 'package:driveridee/multi_languages.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'l10/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,34 +34,11 @@ void main() async {
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static void setLocale(BuildContext context, Locale newLocale) {
-    var state = context.findAncestorStateOfType<_MyAppState>();
-    print("newLocale"+newLocale.toString());
-    state?.setLocale(newLocale);
-  }
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  late Locale _locale;
-
-  void setLocale(Locale locale) {
-    setState(() {
-      _locale = locale;
-    });
-  }
-
-  @override
-  void didChangeDependencies() async {
-    getLocale().then((locale) {
-      setState(() {
-        _locale = locale;
-      });
-    });
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,27 +47,20 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.teal,
+          primarySwatch: Colors.red,
         ),
         // home: MapSample(),
         home: const MySplashScreen(),
         debugShowCheckedModeBanner: false,
-        supportedLocales: [Locale('en', ''), Locale('am', '')],
-        localizationsDelegates: [
-          AppLocalizationsDelegate(),
-          // GlobalMaterialLocalizations.delegate,
-          // GlobalWidgetsLocalizations.delegate,
-          // GlobalCupertinoLocalizations.delegate,
+        supportedLocales:
+        L10n.all,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
         ],
-        localeResolutionCallback: (locale, supportedLocales) {
-          for (var supportedLocale in supportedLocales) {
-            if (supportedLocale?.languageCode == locale?.languageCode &&
-                supportedLocale?.countryCode == locale?.countryCode) {
-              return supportedLocale;
-            }
-          }
-          return supportedLocales?.first;
-        },
+       
       ),
     );
   }

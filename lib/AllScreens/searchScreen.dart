@@ -36,7 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.teal,
+                    color: Colors.red,
                     blurRadius: 6.0,
                     spreadRadius: 0.4,
                     offset: Offset(1, 1),

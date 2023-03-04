@@ -59,20 +59,26 @@ class _CarInfoState extends State<CarInfo> {
       reference.child(userId).child("Car_details").set(CarInfoMap);
 
       Fluttertoast.showToast(msg: "Car details has been registered.");
-    //  var response = await OnPremMethods.createUseronPrem( onlineDriverData.name!, onlineDriverData.lname!,onlineDriverData.phone!,onlineDriverData.email!,onlineDriverData.id!, onlineDriverData.pw!,carColorTextEditingController.text.trim()
-    //     ,carModelTextEditingController.text.trim(),
-    //     carNumberTextEditingController.text.trim());
-    //   print("response");
-    //   print(response);
-    //   if (response.statusCode == 200) {
-    //     Fluttertoast.showToast(msg: "Account has been Created.");
-    //     Navigator.push(
-    //         context, MaterialPageRoute(builder: (c) => MainScreen()));
-    //   } else if (response.statusCode == 400) {
-    //     Fluttertoast.showToast(msg: "Account has not been Created.");
-    //     Navigator.pop(context);
-    //   }
-
+      var response = await OnPremMethods.createUseronPrem(
+          onlineDriverData.name!,
+          onlineDriverData.lname!,
+          onlineDriverData.phone!,
+          onlineDriverData.email!,
+          currentFirebaseUser!.uid,
+          onlineDriverData.pw!,
+          carColorTextEditingController.text.trim(),
+          carModelTextEditingController.text.trim(),
+          carNumberTextEditingController.text.trim());
+      print("response");
+      print(response);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(msg: "Account has been Created.");
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => MainScreen()));
+      } else if (response.statusCode == 400) {
+        Fluttertoast.showToast(msg: "Account has not been Created.");
+        Navigator.pop(context);
+      }
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Car details has not been registered.");

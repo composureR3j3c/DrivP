@@ -6,8 +6,6 @@ import 'LoginScreen.dart';
 import 'mainScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-
 class MySplashScreen extends StatefulWidget {
   const MySplashScreen({Key? key}) : super(key: key);
 
@@ -45,25 +43,38 @@ class _MySplashScreenState extends State<MySplashScreen> {
     return Material(
       child: Container(
         color: Colors.white,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("images/logo.png"),
-              const SizedBox(
-                height: 10,
+        child: Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(60, 60, 60, 0),
+                    child: Image.asset("images/logo.png"),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "One Taxi Driver",
+                    style: GoogleFonts.pacifico(
+                      textStyle: TextStyle(
+                          color: Colors.red,
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 16,
+                              color: Colors.black54,
+                              offset: Offset(0.6, 0.6),
+                            )
+                          ]),
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                "One Taxi Driver",
-                style: GoogleFonts.pacifico(
-                    textStyle: TextStyle(
-                  color: Colors.red,
-                  fontSize: 48,
-                  fontWeight: FontWeight.w900,
-                ),),),
-            ],
-          ),
-        ),
+            )),
       ),
     );
   }

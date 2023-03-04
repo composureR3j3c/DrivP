@@ -80,9 +80,16 @@ class OnPremMethods {
     }
   }
 
-
-  static Future<dynamic> createUseronPrem(String fname, String lname,
-      String phone, String email, String deviceId, String pw, String color,String model,String plate ) async {
+  static Future<dynamic> createUseronPrem(
+      String fname,
+      String lname,
+      String phone,
+      String email,
+      String deviceId,
+      String pw,
+      String color,
+      String model,
+      String plate) async {
     String url = "$premUrl/ride-app/register";
     String key =
         "Qq87PGWPscPQfzlCz4ralI7JtrGcZ6ymYxjGxxHOmTKsBPCxXxSDlZr5jjidQzi117kdaCggXtw8HQ9fS2CEsMdavclyeO4uN4D1Ymm4OTnzlGPeFFT5PPN1JEPWSS7w";
@@ -92,22 +99,49 @@ class OnPremMethods {
     };
 
     Map Body = {
-      "type": "Driver",
+      "type": "driver",
       "fname": fname,
       "lname": lname,
       "phone": phone,
       "email": email,
       "deviceId": deviceId,
       "pw": pw,
-      "color":color,
-      "model":model,
-      "plate":plate
+      "carColor": color,
+      "carBrand": model,
+      "plateNo": plate
     };
+    print("body" + Body.toString());
     http.Response httpResponse = await http.post(
       Uri.parse(url),
       body: jsonEncode(Body),
       headers: header,
     );
+    print("res" + httpResponse.toString());
     return httpResponse;
+  }
+
+  static Future<dynamic> premLoginIn(String userName, String password) async {
+    String url = "$premUrl/ride-app/login";
+    String key =
+        "Qq87PGWPscPQfzlCz4ralI7JtrGcZ6ymYxjGxxHOmTKsBPCxXxSDlZr5jjidQzi117kdaCggXtw8HQ9fS2CEsMdavclyeO4uN4D1Ymm4OTnzlGPeFFT5PPN1JEPWSS7w";
+    Map<String, String> header = {
+      'Content-Type': 'application/json',
+      'Authorization': key,
+    };
+
+    Map Body = {"type": "driver", "userName": userName, "password": password};
+    try {
+      http.Response httpResponse = await http.get(
+        Uri.parse(url),
+        headers: header,
+      );
+      if (httpResponse.statusCode == 200) {
+        return jsonDecode(httpResponse.body);
+      } else {
+        return 404;
+      }
+    } catch (e) {
+      return e;
+    }
   }
 }

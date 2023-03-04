@@ -37,7 +37,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         controller: tabController,
         children: [
           HomeTab(),
-          EarningsTab(),
+          EarningsTabPage(),
           RatingsTab(),
           ProfileTab(),
         ],
@@ -51,7 +51,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
         ],
         unselectedItemColor: Colors.black54,
-        selectedItemColor: Colors.teal,
+        selectedItemColor: Colors.red,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: 12.0,
         showUnselectedLabels: true,

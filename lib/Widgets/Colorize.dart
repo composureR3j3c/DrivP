@@ -6,7 +6,7 @@ class Colorize  extends StatelessWidget {
   static
   const colorizeColors = [
     // Colors.purple,
-    Colors.teal,
+    Colors.red,
     Colors.blue,
     Colors.yellow,
     Colors.red,

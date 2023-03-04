@@ -1,9 +1,11 @@
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart';
 
 import '../Globals/Global.dart';
 import '../Widgets/ProgressDialog.dart';
@@ -49,7 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
       Fluttertoast.showToast(msg: "Error: " + msg.toString());
     }))
         .user;
-
+    var response = await OnPremMethods.premLoginIn(
+      emailTextEditingController.text.trim(),
+      passwordTextEditingController.text.trim(),
+    );
     if (firebaseUser != null) {
       DatabaseReference driversRef =
           FirebaseDatabase.instance.ref().child("drivers");
@@ -57,9 +62,19 @@ class _LoginScreenState extends State<LoginScreen> {
         final snap = driverKey.snapshot;
         if (snap.value != null) {
           currentFirebaseUser = firebaseUser;
+        }
+        if (response != 404) {
           Fluttertoast.showToast(msg: "Login Successful.");
           Navigator.push(context,
               MaterialPageRoute(builder: (c) => const MySplashScreen()));
+          onlineDriverData.name = response["profile"]["fname"];
+          onlineDriverData.lname = response["profile"]["lname"];
+          onlineDriverData.phone = response["profile"]["phone"];
+          onlineDriverData.email = response["profile"]["email"];
+          onlineDriverData.id = response["profile"]["deviceId"];
+          onlineDriverData.car_model = response["carDetails"]["carBrand"];
+          onlineDriverData.car_color = response["carDetails"]["carColor"];
+          onlineDriverData.car_number = response["carDetails"]["plateNo"];
         } else {
           Fluttertoast.showToast(msg: "No record exist with this email.");
           fAuth.signOut();
@@ -76,30 +91,30 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(50.0),
           child: Column(
             children: [
               const SizedBox(
-                height: 30,
+                height: 50,
               ),
               Padding(
-                padding: const EdgeInsets.all(50.0),
-                child: Image.asset("images/logo.png"),
-              ),
-              const SizedBox(
-                height: 10,
+                padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0),
+                child: Image.asset("images/logo2.png"),
               ),
               Text(
                 "One Taxi",
-                            style: GoogleFonts.pacifico(
-                                textStyle: TextStyle(
-                              color: Colors.red,
-                              fontSize: 30,
-                              fontWeight: FontWeight.w900,)
-                ),
+                style: GoogleFonts.pacifico(
+                    textStyle: TextStyle(
+                  color: Colors.red,
+                  fontSize: 30,
+                  fontWeight: FontWeight.w900,
+                )),
+              ),
+              const SizedBox(
+                height: 60,
               ),
               TextField(
                 controller: emailTextEditingController,
@@ -149,22 +164,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 40,
               ),
               ElevatedButton(
                 onPressed: () {
                   validateForm();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.lightGreenAccent,
+                  primary: Colors.redAccent,
                 ),
                 child: const Text(
                   "Login",
                   style: TextStyle(
-                    color: Colors.black54,
+                    color: Colors.white,
                     fontSize: 18,
                   ),
                 ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               TextButton(
                 child: const Text(
