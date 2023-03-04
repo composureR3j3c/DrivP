@@ -1,8 +1,10 @@
 import 'package:driveridee/AllScreens/SplashScreen.dart';
 import 'package:driveridee/AllScreens/home.dart';
 import 'package:driveridee/Globals/Global.dart';
+import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:flutter/material.dart';
 
+import '../../Models/driversData.dart';
 import '../../Widgets/info_design_ui.dart';
 
 class ProfileTab extends StatefulWidget {
@@ -93,12 +95,16 @@ class _ProfileTabState extends State<ProfileTab> {
                 child: const Text(
                   "Sign Out",
                 ),
-                onPressed: () {
-                  fAuth.signOut();
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (c) => const MySplashScreen()));
+                onPressed: () async {
+                  var res = OnPremMethods.premLoginOut(onlineDriverData.phone!);
+                  if (res != 404) {
+                    onlineDriverData = DriverData();
+                    fAuth.signOut();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (c) => const MySplashScreen()));
+                  }
                 },
               ),
             )
