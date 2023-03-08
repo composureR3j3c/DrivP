@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../Globals/Global.dart';
-import '../Helpers/assistantMethods.dart';
 import 'LoginScreen.dart';
 import 'mainScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,16 +14,22 @@ class MySplashScreen extends StatefulWidget {
 }
 
 class _MySplashScreenState extends State<MySplashScreen> {
+  final _storage = const FlutterSecureStorage();
   startTimer() {
-    fAuth.currentUser != null
-        ? AssistantMethods.readCurrentOnlineUserInfo()
-        : null;
-
     Timer(const Duration(seconds: 3), () async {
-      if (await fAuth.currentUser != null) {
-        currentFirebaseUser = fAuth.currentUser;
+      var logdName = await _storage.read(key: "name");
+      if (onlineDriverData.id != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (c) => MainScreen()));
+            context, MaterialPageRoute(builder: (c) => const MainScreen()));
+      } else if (logdName != null) {
+        onlineDriverData.name = await _storage.read(key: "name");
+        onlineDriverData.lname = await _storage.read(key: "lname");
+        onlineDriverData.id = await _storage.read(key: "id");
+        onlineDriverData.phone = await _storage.read(key: "phone");
+        onlineDriverData.email = await _storage.read(key: "email");
+        onlineDriverData.car_model = await _storage.read(key: "car_model");
+        onlineDriverData.car_color = await _storage.read(key: "car_color");
+        onlineDriverData.car_number = await _storage.read(key: "car_number");
       } else {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => LoginScreen()));

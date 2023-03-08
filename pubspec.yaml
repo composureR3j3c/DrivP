@@ -54,6 +54,8 @@ dependencies:
   multi_language_json: ^1.2.0
   google_fonts: ^4.0.3
   intl: ^0.17.0
+  flutter_secure_storage: ^8.0.0
+  upgrader: ^6.0.1
 
 dev_dependencies:
   flutter_test:

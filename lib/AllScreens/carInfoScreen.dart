@@ -2,8 +2,10 @@ import 'package:driveridee/AllScreens/SplashScreen.dart';
 import 'package:driveridee/AllScreens/mainScreen.dart';
 import 'package:driveridee/Globals/Global.dart';
 import 'package:driveridee/Helpers/onPremHelpers.dart';
+import 'package:driveridee/Widgets/DropDown.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../Widgets/ProgressDialog.dart';
@@ -22,7 +24,7 @@ class _CarInfoState extends State<CarInfo> {
       TextEditingController();
 
   TextEditingController carColorTextEditingController = TextEditingController();
-
+  final _storage = const FlutterSecureStorage();
   validateForm() {
     if (carNumberTextEditingController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Please enter Car Number.");
@@ -68,7 +70,28 @@ class _CarInfoState extends State<CarInfo> {
           onlineDriverData.pw!,
           carColorTextEditingController.text.trim(),
           carModelTextEditingController.text.trim(),
-          carNumberTextEditingController.text.trim());
+          carNumberTextEditingController.text.trim(),
+          "econ");
+
+      onlineDriverData.name = response["profile"]["fname"];
+      onlineDriverData.lname = response["profile"]["lname"];
+      onlineDriverData.phone = response["profile"]["phone"];
+      onlineDriverData.email = response["profile"]["email"];
+      onlineDriverData.id = response["profile"]["deviceId"];
+      onlineDriverData.car_model = response["carDetails"]["carBrand"];
+      onlineDriverData.car_color = response["carDetails"]["carColor"];
+      onlineDriverData.car_number = response["carDetails"]["plateNo"];
+
+      await _storage.write(key: "name", value: onlineDriverData.name);
+      await _storage.write(key: "lname", value: onlineDriverData.lname);
+      await _storage.write(key: "phone", value: onlineDriverData.phone);
+      await _storage.write(key: "email", value: onlineDriverData.email);
+      await _storage.write(key: "id", value: onlineDriverData.id);
+      await _storage.write(key: "car_model", value: onlineDriverData.car_model);
+      await _storage.write(key: "car_color", value: onlineDriverData.car_color);
+      await _storage.write(
+          key: "car_number", value: onlineDriverData.car_number);
+
       print("response");
       print(response);
       if (response.statusCode == 200) {
@@ -189,6 +212,10 @@ class _CarInfoState extends State<CarInfo> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  DropdownButtonType(),
                   SizedBox(
                     height: 40.0,
                   ),

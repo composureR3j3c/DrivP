@@ -23,3 +23,4 @@ StreamSubscription<Position>? streamSubscriptionDriverLivePosition;
 
 String premUrl = "https://rideapi.gubanet.com";
 String? globalRideRequestId = "";
+String finalDropdownValue = "econ";

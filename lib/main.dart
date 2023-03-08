@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:upgrader/upgrader.dart';
 
 import 'l10/l10n.dart';
 
@@ -39,7 +40,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -50,17 +50,15 @@ class _MyAppState extends State<MyApp> {
           primarySwatch: Colors.red,
         ),
         // home: MapSample(),
-        home: const MySplashScreen(),
+        home: UpgradeAlert(child: const MySplashScreen()),
         debugShowCheckedModeBanner: false,
-        supportedLocales:
-        L10n.all,
+        supportedLocales: L10n.all,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-       
       ),
     );
   }

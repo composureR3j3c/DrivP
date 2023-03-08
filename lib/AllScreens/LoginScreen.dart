@@ -2,6 +2,7 @@ import 'package:driveridee/Helpers/onPremHelpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +21,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
-
+  final _storage = const FlutterSecureStorage();
   validateForm() {
     if (!emailTextEditingController.text.contains("@")) {
       Fluttertoast.showToast(msg: "Email address is not Valid.");
@@ -58,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (firebaseUser != null) {
       DatabaseReference driversRef =
           FirebaseDatabase.instance.ref().child("drivers");
-      driversRef.child(firebaseUser.uid).once().then((driverKey) {
+      driversRef.child(firebaseUser.uid).once().then((driverKey) async {
         final snap = driverKey.snapshot;
         if (snap.value != null) {
           currentFirebaseUser = firebaseUser;
@@ -75,6 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
           onlineDriverData.car_model = response["carDetails"]["carBrand"];
           onlineDriverData.car_color = response["carDetails"]["carColor"];
           onlineDriverData.car_number = response["carDetails"]["plateNo"];
+
+          await _storage.write(key: "name", value: onlineDriverData.name);
+          await _storage.write(key: "lname", value: onlineDriverData.lname);
+          await _storage.write(key: "phone", value: onlineDriverData.phone);
+          await _storage.write(key: "email", value: onlineDriverData.email);
+          await _storage.write(key: "id", value: onlineDriverData.id);
+          await _storage.write(
+              key: "car_model", value: onlineDriverData.car_model);
+          await _storage.write(
+              key: "car_color", value: onlineDriverData.car_color);
+          await _storage.write(
+              key: "car_number", value: onlineDriverData.car_number);
         } else {
           Fluttertoast.showToast(msg: "No record exist with this email.");
           fAuth.signOut();

@@ -89,7 +89,8 @@ class OnPremMethods {
       String pw,
       String color,
       String model,
-      String plate) async {
+      String plate,
+      String carClass) async {
     String url = "$premUrl/ride-app/register";
     String key =
         "Qq87PGWPscPQfzlCz4ralI7JtrGcZ6ymYxjGxxHOmTKsBPCxXxSDlZr5jjidQzi117kdaCggXtw8HQ9fS2CEsMdavclyeO4uN4D1Ymm4OTnzlGPeFFT5PPN1JEPWSS7w";
@@ -108,7 +109,8 @@ class OnPremMethods {
       "pw": pw,
       "carColor": color,
       "carBrand": model,
-      "plateNo": plate
+      "plateNo": plate,
+      "carClass": carClass
     };
     print("body" + Body.toString());
     http.Response httpResponse = await http.post(
@@ -131,10 +133,8 @@ class OnPremMethods {
 
     Map Body = {"type": "driver", "userName": userName, "password": password};
     try {
-      http.Response httpResponse = await http.get(
-        Uri.parse(url),
-        headers: header,
-      );
+      http.Response httpResponse = await http.post(Uri.parse(url),
+          headers: header, body: jsonEncode(Body));
       if (httpResponse.statusCode == 200) {
         return jsonDecode(httpResponse.body);
       } else {
@@ -169,4 +169,5 @@ class OnPremMethods {
       return e;
     }
   }
+
 }
